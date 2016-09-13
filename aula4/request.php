@@ -21,6 +21,15 @@ class Request
 		$this->path = $path;
 		$this->query_string = $query;
 		$this->body = $body; 
+	}
+
+	public function __get($atrib)
+	{
+		return $this->$atrib;
+	}
+	public function __set($atrib, $value)
+	{
+		$this->$atrib = $value;
 	}	
 
 }
