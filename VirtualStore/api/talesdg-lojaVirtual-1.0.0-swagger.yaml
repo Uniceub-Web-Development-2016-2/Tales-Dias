@@ -1,0 +1,380 @@
+---
+swagger: "2.0"
+info:
+  description: "First version of VirtualStore API"
+  version: "1.0.0"
+  title: "VirtualStore API"
+  termsOfService: "https://github.com/Uniceub-Web-Development-2016-2/Tales-Dias/"
+  contact:
+    email: "talesdg@icloud.com"
+  license:
+    name: "The MIT License (MIT)"
+    url: "https://tldrlegal.com/license/mit-license"
+host: "localhost"
+basePath: "/VirtualStore/api"
+tags:
+- name: "cliente"
+  description: “Methods to visible Clients”
+- name: "product methods"
+  description: "Methods to improve product achieviment"
+- name: "virtualstore"
+  description: "Virtual Store goals"
+  externalDocs:
+    description: "Find out more about"
+    url: "https://github.com/Uniceub-Web-Development-2016-2/Tales-Dias/readme.pdf"
+schemes:
+- "http"
+paths:
+  /simple_cliente:
+    get:
+      tags:
+      - "cliente"
+      summary: "Get a Clients by ID"
+      description: "Each Clients has an ID inside system's DB and they can be accessed by this method."
+      operationId: "getCliente"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id_cliente"
+        in: query
+        description: "cliente ID"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        200:
+          description: "Successful operation"
+          schema:
+            $ref: "#/definitions/cliente"
+        400:
+          description: "Invalid ID supplied"
+        404:
+          description: "No cliente related to this term"
+  /simple_cliente/getAll:
+    get:
+      tags:
+      - "cliente"
+      summary: "Get all Clients available in the system"
+      description: "Get all the records from cliente table in database"
+      operationId: "getAllcliente"
+      produces:
+      - "application/json"
+      responses:
+        200:
+          description: "Successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/cliente"
+        404:
+          description: "No objects found"
+  /simple_cliente/getByTag:
+    get:
+      tags:
+        - "cliente"
+        - "term"
+        - "keyword"
+      summary:  "Get a cliente by a tag in its keywords"
+      description:  "Return an array of cliente that attends the searched tag"
+      operationId:  "getByTagId"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id_tag"
+        in: query
+        description: "ID of a specific tag used in cliente keywords"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        200:
+          description: "Successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/cliente"
+        400:
+          description: "Invalid ID supplied"
+        404:
+          description: "No cliente related to this term"
+  /simple_cliente/getBySubject:
+    get:
+      tags:
+        - "cliente"
+        - "subject"
+      summary:  "Get a cliente by a subject related to it (Bone, Blusa, Bermuda...)"
+      description:  "Return an array of cliente that attends the searched subject"
+      operationId:  "getBySubjectId"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "subjectId"
+        in: query
+        description: "ID of a specific term used in cliente keywords"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        200:
+          description: "Successful operation"
+          schema:
+            $ref: "#/definitions/cliente"
+        400:
+          description: "Invalid ID supplied"
+        404:
+          description: "No cliente found"
+      security:
+      - api_key: []
+  /simple_cliente/insert:
+    post:
+      tags:
+      - "cliente"
+      summary: "Updates a pet in the store with form data"
+      description: ""
+      operationId: "updatePetWithForm"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "cliente"
+        in: "query"
+        description: "cliente Json file"
+        required: true
+        type: "string"
+        format: "json"
+      responses:
+        200:
+          description: "Successful operation"
+        405:
+          description: "Invalid input"
+      security:
+      - virtualstore_auth:
+        - "write:cliente"
+        - "read:cliente"
+
+  /product:
+    get:
+      tags:
+      - "product"
+      summary: "Get a product by internal ID"
+      description: "Each product has an ID inside system's DB and they can be accessed by this method."
+      operationId: "getProduct"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id_product"
+        in: query
+        description: "product ID"
+        required: false
+        type: "integer"
+        format: "int64"
+      - name: "str_product"
+        in: query
+        description: "product ID"
+        required: false
+        type: "integer"
+        format: "int64"
+      responses:
+        200:
+          description: "Successful operation"
+          schema:
+            $ref: "#/definitions/cliente"
+        400:
+          description: "Invalid ID supplied"
+        404:
+          description: "No cliente related to this term"
+
+  /product/getProductsByCategory:
+    get:
+      tags:
+        - "cliente"
+        - "subject"
+      summary:  "Get all the product in a category"
+      description:  "Return an array of products in a specific category"
+      operationId:  "getProductsByCategory"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id_category"
+        in: query
+        description: "ID of a specific category"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        200:
+          description: "Successful operation"
+          schema:
+            $ref: "#/definitions/product"
+        400:
+          description: "Invalid ID supplied"
+        404:
+          description: "No product found"
+      security:
+      - api_key: []
+  /product/getProductReport:
+    get:
+      tags:
+        - "cliente"
+        - "subjects"
+        - "report"
+      summary:  "GEt"
+      description:  "Returns a product report"
+      operationId:  "Returns a product report with type, suggested by best seller, passing his/her id"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id_product"
+        in: query
+        description: "ID of a specific product"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        200:
+          description: "Successful operation"
+          schema:
+            $ref: "#/definitions/REPORT"
+        400:
+          description: "Invalid ID supplied"
+        404:
+          description: "No product found"
+      security:
+      - api_key: []
+  /product/insert:
+    post:
+      tags:
+      - "product"
+      summary: "Insert a new product in DB"
+      description: "Insert a new product in DB passing a json file and using the security settings"
+      operationId: "insertproduct"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "cliente"
+        in: "query"
+        description: "product Json file"
+        required: true
+        type: "string"
+        format: "json"
+      responses:
+        200:
+          description: "Successful operation"
+        405:
+          description: "Invalid input"
+      security:
+      - virtualstore_auth:
+        - "write:cliente"
+        - "read:cliente"
+  /product/update:
+    post:
+      tags:
+      - "product"
+      summary: "Update a product in DB"
+      description: "Updates a product in db using its ID"
+      operationId: "updateproduct"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "productId"
+        in: query
+        description:  "product unique identification"
+        required: true
+        type: "integer"
+        format: "int64"
+      - name: "product"
+        in: query
+        description: "product Json file"
+        required: true
+        type: "string"
+        format: "json"
+      responses:
+        200:
+          description: "Successful operation"
+        405:
+          description: "Invalid input"
+      security:
+      - virtualstore_auth:
+        - "write:product"
+        - "read:product"
+securityDefinitions:
+  virtualstore_auth:
+    type: "oauth2"
+    authorizationUrl: ""
+    flow: "implicit"
+    scopes:
+      write:cliente: "insert cliente"
+      read:cliente: "get cliente"
+      write:product:  "insert product"
+      read:product:  "get product"
+  api_key:
+    type: "apiKey"
+    name: "api_key"
+    in: "header"
+definitions:
+  cliente:
+    type: "object"
+    properties:
+      id_cliente:
+        type: "integer"
+        format: "int64"
+      Nome:
+        type: "string"
+      CPF:
+        type: "string"
+      Celular:
+        type: "string"
+      Rua:
+        type: "string"
+      Bairro:
+        type: "string"
+      CIdade:
+        type: "string"
+      Estado:
+        type: "string"
+    xml:
+      name: "cliente"
+  REPORT:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+      URL:
+        type: "string"
+    xml:
+      name: "cliente"
+  product:
+    type: "object"
+    properties:
+      id_product:
+        type: "integer"
+        format: "int64"
+      Nome:
+        type: "string"
+      Quantidade:
+        type: "integer"
+        format: "int64"
+      Preco:
+        type: "integer"
+        format: "int64"
+      Categoria:
+        type: "string"
+      tb_categoria_id_categoria:
+        type: "integer"
+        format: "int64"
+      tb_cliente_id_cliente:
+        type: "integer"
+        format: "int64"
+externalDocs:
+  description: "Find out more about Virtual Store"
+  url: "https://github.com/Uniceub-Web-Development-2016-2/Tales-Dias/readme.pdf"
